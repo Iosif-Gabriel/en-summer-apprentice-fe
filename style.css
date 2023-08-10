@@ -119,19 +119,23 @@ h1 {
 
 .event-location {
   font-size: 16px;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .event-image {
-  width: 230px;
   height: 154px;
   border-radius: 10px;
   display: block;
-  margin-bottom: 10px;
 }
 
 .img-icon {
   width: 25px;
   height: 25px;
   margin-right: 8px;
+}
+
+.ticket-category-dropdown{
+  background-color: #000000;
+
 }
