@@ -13,7 +13,14 @@ h1 {
   font-size: 32px;
   font-weight: bold;
   margin-bottom: 12px;
-  color: #ffffff;
+  color: #f8f8f8;
+}
+
+video {
+  position: relative;
+  z-index: -1;
+  width: 100%;
+  height: auto;
 }
 
 .events .event {
@@ -88,7 +95,7 @@ h1 {
   white-space: nowrap; 
 }
 
-.order-button {
+/* .order-button {
   width: 85px;
   height: 54px;
   background: whitesmoke;
@@ -98,7 +105,7 @@ h1 {
   cursor: pointer;
   margin-top: 20px;
   margin-bottom: 20px;
-}
+} */
 
 .event-info {
   padding: 20px;
@@ -114,7 +121,6 @@ h1 {
 
 .event-description {
   font-size: 16px;
-  margin-bottom: 10px;
 }
 
 .event-location {
@@ -139,3 +145,26 @@ h1 {
   background-color: #000000;
 
 }
+
+.menu-container {
+  
+  z-index: 99999;
+  position: relative;
+  opacity: 1;
+}
+.filter-container {
+  margin: 1px; /* Adjust the margin as needed */
+}
+
+
+.filter-input {
+  flex: 1;
+  margin-right: 150px;
+  margin-left: 0px;
+}
+
+.filter-input {
+  flex: 1; /* Let the input take up the remaining space */
+}
+
+
