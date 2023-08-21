@@ -4,6 +4,7 @@ body {
 }
 
 .events {
+  margin-top: 30px;
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -19,14 +20,37 @@ h1 {
 video {
   position: relative;
   z-index: -1;
-  width: 100%;
+  width: auto;
   height: auto;
+  margin: 0 auto;
+   
 }
 
 .events .event {
   width: 300px;
-  border: 1px solid #ebf1f6;
+  height: 225px;
+  border: 1px solid #ffffff;
   box-shadow: 0 0 2px 0 rgba(145,158,171,.2), 0 12px 24px -4px rgba(145,158,171,.12);
+  transition: width 0.5s, height 0.5s;
+}
+
+.event:hover{
+  height: 460px;
+  width: 300px;
+  border: 1px solid #ff0000;
+  animation-name: glow;
+  animation-duration: 5s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ff0000;
+  }
+  50% {
+    box-shadow: none;
+  }
 }
 
 .event-title {
@@ -64,15 +88,34 @@ video {
   padding: 6px;
 }
 
-.add-btn {
-  background-color: #07058d;
-}
-
 .add-to-cart-btn {
   background: #fffffe;
   margin: 22px auto;
   display: block;
   width: 100%;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+}
+
+.add-to-cart-btn:not([disabled]) {
+  animation-name: shake;
+  animation-iteration-count: infinite;
+}
+
+.add-to-cart-btn:hover {
+  background: #ff6a00;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translate(-1px, -1px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translate(1px, 1px);
+  }
 }
 
 .main-content-component {

@@ -38,8 +38,6 @@ const categoriesOptions = eventTicketCategories.map((ticketCategory) => `
 ).join('\n');
 
 
- //const categoriesOptions = `<option class="text-sm font-bold text-white" value=${order.idTicketCategory}>${order.ticketDescription}</option>`;
-
   purchaseType.innerHTML = categoriesOptions;
   const purchaseTypeWrapper = createDiv(...usesStyles('purchaseTypeWrapper'));
   purchaseTypeWrapper.append(purchaseType);
