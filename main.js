@@ -6,8 +6,11 @@ import { createEventElement } from "./createEventElement";
 import { setEvents, getEvents } from './eventsModule.js';
 import { setTickets, getTickets } from "./ticketsModule";
 import {setupFilterEvents} from "./filterSearch";
-import {displayEventByVenue, displayEventByType} from "./filterDrop";
+import {displayEventsByFilter, filterVenueEventTypes} from "./filterDrop";
 import { getTicketsCategory } from "./getTicket";
+import {filterBack} from "./backEndFilter";
+import { setOrders,getOrders } from "./ordersModule";
+import { get } from "lodash";
 // Navigate to a specific URL
 function navigateTo(url) {
   history.pushState(null, null, url);
@@ -69,6 +72,57 @@ function getOrdersPageTemplate() {
   `;
 }
 
+function performSort(orders, ascending) {
+  const sortedOrders = orders.sort((a, b) => {
+    const eventNameA = a.eventName.toLowerCase();
+    const eventNameB = b.eventName.toLowerCase();
+    
+    if (ascending) {
+      return eventNameA.localeCompare(eventNameB);
+    } else {
+      return eventNameB.localeCompare(eventNameA);
+    }
+  });
+  return sortedOrders;
+}
+
+function bindSortingEventListener() {
+  let ascending = true;
+
+  const orderEventNameButton = document.getElementById('sorting-button-1');
+  orderEventNameButton.addEventListener('click', () => {
+    const orders = getOrders();
+    const sortedOrders = performSort(orders, ascending);
+    
+    const categories = getTickets();
+    const purchasesDiv = document.querySelector('.purchases');
+    const purchasesContent = document.getElementById('purchases-content');
+    
+ 
+    purchasesContent.innerHTML = '';
+    
+    sortedOrders.forEach(order => {
+      const newOrder = createOrderItem(categories, order);
+      purchasesContent.appendChild(newOrder);
+    });
+    
+    purchasesDiv.appendChild(purchasesContent);
+    
+    const icon = document.getElementById('sorting-icon-1');
+    if (ascending) {
+      icon.classList.remove('fa-arrow-down-wide-short');
+      icon.classList.add('fa-arrow-up-wide-short');
+    } else {
+      icon.classList.remove('fa-arrow-up-wide-short');
+      icon.classList.add('fa-arrow-down-wide-short');
+    }
+    
+    ascending = !ascending;
+  });
+}
+
+
+
 function setupNavigationEvents() {
   const navLinks = document.querySelectorAll('nav a');
   navLinks.forEach((link) => {
@@ -110,16 +164,19 @@ function renderHomePage() {
 
  
   addLoader();
-  setupFilterEvents();
   
-  fetchTicketEvents().then((data) => {
+
+  fetchEvents().then((data) => {
     setEvents(data);
 
     const { venueArray, eventTypeArray } = getVennueEventTypes();
 
     updateDropdowns(venueArray, eventTypeArray);
-    displayEventByVenue();
-    displayEventByType();
+
+    const venueDropdown = document.getElementById('filter-venue');
+    const typeDropdown = document.getElementById('filter-type');    
+
+    filterVenueEventTypes(venueDropdown,typeDropdown);
 
     setTimeout(() => {
       removeLoader();
@@ -129,7 +186,7 @@ function renderHomePage() {
   });
 }
 
-async function fetchTicketEvents() {
+async function fetchEvents() {
   const response = await fetch('http://localhost:8080/getAllEvents');
   const data = await response.json();
   return data;
@@ -183,19 +240,23 @@ export function renderOrdersPage(categories) {
         setTimeout(() => {
           removeLoader();
         }, 200);
-
+        setOrders(orders);
         orders.forEach(order => {
         
           const newOrder = createOrderItem(categories, order);
           purchasesContent.appendChild(newOrder);
+         
         });
 
         purchasesDiv.appendChild(purchasesContent);
+        bindSortingEventListener();
       } else {
         removeLoader();
       }
     });
+    
   }
+ 
 }
 
 
@@ -227,9 +288,11 @@ function updateDropdowns(venueArray, eventTypeArray) {
   }
 }
 
+
 function generateDropdownOptions(optionsArray) {
 return optionsArray.map(option => `<option value="${option}">${option}</option>`).join('');
 }
+
 // Render content based on URL
 function renderContent(url) {
   const mainContentDiv = document.querySelector('.main-content-component');
@@ -239,6 +302,7 @@ function renderContent(url) {
     renderHomePage();
   } else if (url === '/orders') {
     getTicketsCategory().then(categories => {
+      setTickets(categories);
       renderOrdersPage(categories);
     }).catch(error => {
       console.log(error);

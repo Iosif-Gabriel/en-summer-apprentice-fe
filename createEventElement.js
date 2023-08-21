@@ -127,11 +127,13 @@ export const createEventElement = (event,title) => {
     addToCart.classList.add(...addToCartBtnClasses);
     addToCart.innerText='Add to cart';
     addToCart.disabled=true;
+
     
     addToCart.addEventListener('click', () => {
      
       handleAddToCart(title, eventID, input,addToCart)
     });
+   
     eventFooter.appendChild(addToCart);
     eventDiv.appendChild(eventFooter);
   
